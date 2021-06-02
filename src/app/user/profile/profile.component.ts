@@ -26,14 +26,13 @@ export class ProfileComponent implements OnInit {
               private dialog: MatDialog,
               private notificationService: NotificationService,
               private imageService: ImageUploadService,
-              private userService: UserService
-  ) {
+              private userService: UserService) {
   }
 
   ngOnInit(): void {
     this.userService.getCurrentUser()
       .subscribe(data => {
-        this.userProfileImage = data.imageBytes;
+        this.user = data;
         this.isUserDataLoaded = true;
       });
 
@@ -44,7 +43,7 @@ export class ProfileComponent implements OnInit {
   }
 
   onFileSelected(event): void {
-    this.selectedFile = event.target.file[0];
+    this.selectedFile = event.target.files[0];
 
     const reader = new FileReader();
     reader.readAsDataURL(this.selectedFile);
@@ -73,7 +72,7 @@ export class ProfileComponent implements OnInit {
     if (this.selectedFile != null) {
       this.imageService.uploadImageToUser(this.selectedFile)
         .subscribe(() => {
-          this.notificationService.showSnackBar('Profile image uploaded successfully');
+          this.notificationService.showSnackBar('Profile Image updated successfully');
         });
     }
   }
